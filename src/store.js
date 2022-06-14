@@ -6,34 +6,35 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    idToken: null,
-    userId: null,
+    token: null,
     user: null
   },
   mutations: {
     authUser(state, userData) {
-      state.idToken = userData.token
-      state.userId = userData.userId
+      state.token = userData.token
+      state.user = userData.user
     },
     clearAuth(state) {
-      state.idToken = null
-      state.userId = null
+      state.token = null
+      state.user = null
     }
   },
   actions: {
     signup({ commit }, authData) {
-      axios.post('https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=AIzaSyAv71t6_6YOyOdpbkmsvqtE2i68uhL3U1g', {
+      axios.post('http://localhost:8080/register', {
+        name: authData.name,
         email: authData.email,
         password: authData.password,
+        confpassword: authData.password,
         returnSecureToken: true
       })
         .then(res => {
           console.log(res)
-          localStorage.setItem('token', res.data.idToken)
-          localStorage.setItem('userId', res.data.localId)
+          localStorage.setItem('token', res.data.token)
+          localStorage.setItem('user', res.data.user)
           commit('authUser', {
-            token: res.data.idToken,
-            userId: res.data.localId
+            token: res.data.token,
+            user: res.data.user
           })
 
           router.push("/dashboard")
@@ -47,11 +48,11 @@ export default new Vuex.Store({
       })
         .then(res => {
           console.log(res)
-          localStorage.setItem('token', res.data.idToken)
-          localStorage.setItem('userId', res.data.localId)
+          localStorage.setItem('token', res.data.token)
+          localStorage.setItem('user', res.data.user)
           commit('authUser', {
-            token: res.data.idToken,
-            userId: res.data.localId
+            token: res.data.token,
+            user: res.data.user
           })
           router.push("/dashboard")
         })
@@ -60,7 +61,7 @@ export default new Vuex.Store({
     logout({ commit }) {
       commit('clearAuth')
       localStorage.removeItem('token')
-      localStorage.removeItem('userId')
+      localStorage.removeItem('user')
       router.replace('/')
     },
     AutoLogin({ commit }) {
@@ -68,10 +69,10 @@ export default new Vuex.Store({
       if (!token) {
         return
       }
-      const userId = localStorage.getItem('userId')
+      const user = localStorage.getItem('user')
       commit('authUser', {
         token: token,
-        userId: userId
+        user: user
       })
     }
   },
@@ -80,7 +81,7 @@ export default new Vuex.Store({
       return state.user
     },
     ifAuthenticated(state) {
-      return state.idToken !== null
+      return state.token !== null
     }
   }
 })

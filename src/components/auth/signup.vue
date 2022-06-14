@@ -3,12 +3,12 @@
     <div class="signup-form">
       <form @submit.prevent="onSubmit">
         <div class="input">
-          <label for="email">Email</label>
-          <input type="email" id="email" v-model="email" />
-        </div>
-        <div class="input">
           <label for="age">Your Name</label>
           <input type="text" id="name" v-model.number="name" />
+        </div>
+        <div class="input">
+          <label for="email">Email</label>
+          <input type="email" id="email" v-model="email" />
         </div>
         <div class="input">
           <label for="password">Password</label>
