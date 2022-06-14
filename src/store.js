@@ -11,17 +11,17 @@ export default new Vuex.Store({
     user: null
   },
   mutations: {
-    authUser (state, userData) {
+    authUser(state, userData) {
       state.idToken = userData.token
       state.userId = userData.userId
     },
-    clearAuth (state) {
+    clearAuth(state) {
       state.idToken = null
       state.userId = null
     }
   },
   actions: {
-    signup ({commit}, authData) {
+    signup({ commit }, authData) {
       axios.post('https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=AIzaSyAv71t6_6YOyOdpbkmsvqtE2i68uhL3U1g', {
         email: authData.email,
         password: authData.password,
@@ -29,22 +29,21 @@ export default new Vuex.Store({
       })
         .then(res => {
           console.log(res)
-           localStorage.setItem('token', res.data.idToken)
+          localStorage.setItem('token', res.data.idToken)
           localStorage.setItem('userId', res.data.localId)
           commit('authUser', {
             token: res.data.idToken,
             userId: res.data.localId
           })
-        
+
           router.push("/dashboard")
         })
         .catch(error => console.log(error))
     },
-    login ({commit}, authData) {
-      axios.post('https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=AIzaSyAv71t6_6YOyOdpbkmsvqtE2i68uhL3U1g', {
+    login({ commit }, authData) {
+      axios.post('http://localhost:8080/login', {
         email: authData.email,
-        password: authData.password,
-        returnSecureToken: true
+        password: authData.password
       })
         .then(res => {
           console.log(res)
@@ -58,13 +57,13 @@ export default new Vuex.Store({
         })
         .catch(error => console.log(error))
     },
-    logout ({commit}) {
+    logout({ commit }) {
       commit('clearAuth')
       localStorage.removeItem('token')
       localStorage.removeItem('userId')
       router.replace('/')
     },
-    AutoLogin ({commit}) {
+    AutoLogin({ commit }) {
       const token = localStorage.getItem('token')
       if (!token) {
         return
@@ -77,10 +76,10 @@ export default new Vuex.Store({
     }
   },
   getters: {
-    user (state) {
+    user(state) {
       return state.user
     },
-    ifAuthenticated (state) {
+    ifAuthenticated(state) {
       return state.idToken !== null
     }
   }

@@ -1,6 +1,6 @@
 <template>
   <div id="welcome">
-    <h1>Learning Vue Authentication</h1>
+    <h1>Vue Authentication</h1>
     <p>Here you go!</p>
     <div class="cta">
       <router-link to="/signup">Sign Up</router-link>
