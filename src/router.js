@@ -17,8 +17,8 @@ const routes = [
   {
     path: '/dashboard',
     component: DashboardPage,
-    beforeEnter (to, from, next) {
-      if (store.state.idToken) {
+    beforeEnter(to, from, next) {
+      if (store.state.token) {
         next()
       } else {
         next('/signin')
@@ -27,4 +27,4 @@ const routes = [
   }
 ]
 
-export default new VueRouter({mode: 'history', routes})
+export default new VueRouter({ mode: 'history', routes })
